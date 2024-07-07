@@ -8,16 +8,6 @@ mount -t 9p -o trans=virtio,version=9p2000.L,nosuid hostshare /home/ctf
 #done
 sysctl -w kernel.perf_event_paranoid=1
 
-cat <<EOF
-
-
-Boot took $(cut -d' ' -f1 /proc/uptime) seconds
-
-
-Welcome to team202 emu
-
-
-EOF
 chmod 600 /flag
 chown 0.0 /flag
 
