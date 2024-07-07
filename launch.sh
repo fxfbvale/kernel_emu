@@ -18,4 +18,4 @@ popd
 	-nographic \
 	-monitor none \
 	-s \
-	-append "console=ttyS0 nokaslr"
+	-append "console=ttyS0 quiet"
