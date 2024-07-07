@@ -20,5 +20,8 @@ Welcome to team202 emu
 EOF
 chmod 600 /flag
 chown 0.0 /flag
-/bin/sh
-#exec su -l ctf
+
+insmod proc_leak.ko
+insmod bof_module.ko
+
+su -l ctf -c "cd / && exec ./hangman"
