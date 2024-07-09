@@ -3,9 +3,7 @@
 mount -t proc none /proc
 mount -t sysfs none /sys
 mount -t 9p -o trans=virtio,version=9p2000.L,nosuid hostshare /home/ctf
-#for f in $(ls *.ko); do
-#    insmod $f
-#done
+
 sysctl -w kernel.perf_event_paranoid=1
 
 chmod 600 /flag
@@ -14,4 +12,21 @@ chown 0.0 /flag
 insmod proc_leak.ko
 insmod bof_module.ko
 
-su -l ctf -c "cd / && exec ./hangman"
+# Function to shut down QEMU when the program exits
+cleanup() {
+    echo "Shutting down QEMU..."
+    poweroff -f
+}
+
+
+# Trap the exit signal to run the cleanup function
+trap cleanup EXIT
+
+
+su -l ctf
+# Switch to user 'ctf' and execute the hangman program
+#su -l ctf -c "cd / && exec ./hangman"
+
+# Prevent the init process from exiting prematurely
+wait $!
+
