@@ -22,10 +22,11 @@ cleanup() {
 # Trap the exit signal to run the cleanup function
 trap cleanup EXIT
 
+echo 0 | tee /proc/sys/kernel/randomize_va_space
 
-su -l ctf
+#su -l ctf
 # Switch to user 'ctf' and execute the hangman program
-#su -l ctf -c "cd / && exec ./hangman"
+su -l ctf -c "cd / && exec ./hangman"
 
 # Prevent the init process from exiting prematurely
 wait $!
