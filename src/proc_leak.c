@@ -9,7 +9,7 @@
 #define LEAK_SIZE 21
 
 MODULE_LICENSE("GPL"); 
-MODULE_AUTHOR("vale");
+MODULE_AUTHOR("unknown");
 MODULE_DESCRIPTION("A simple kernel module that leaks the address of kernel_listen.");
 
 char leak[128];
