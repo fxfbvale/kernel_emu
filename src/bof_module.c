@@ -22,7 +22,7 @@
 #include <asm/tlbflush.h>
 
 MODULE_LICENSE("GPL"); 
-MODULE_AUTHOR("vale");
+MODULE_AUTHOR("unknown");
 MODULE_DESCRIPTION("A kernel module with a buffer overflow vulnerability.");
 
 char * message_receiver [0x1000];
