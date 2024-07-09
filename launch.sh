@@ -18,4 +18,4 @@ popd
 	-nographic \
 	-monitor none \
 	-s \
-	-append "console=ttyS0 nokaslr nopti nosmep nosmap quiet panic=2 stack_guard_gap=0"
+	-append "console=ttyS0 nopti nosmep nosmap quiet panic=2 stack_guard_gap=0"
