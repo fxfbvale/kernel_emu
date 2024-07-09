@@ -30,18 +30,20 @@ void read_proc_kallsyms(void)
 {
   /**
    * read in the /proc/kallsyms file
+   * 
+   * grep -n kernel_listen /proc/kallsyms | head -n 1 | cut -d: -f1
+      39720
+
    
    - Number of bytes until kernel_listen
-   * head -n 39682 /proc/kallsyms | wc -c
-      1588987
+   * head -n 39720 /proc/kallsyms | wc -c
+      1591068
   */
-  loff_t offset = 1588987;
+  loff_t offset = 1591068;
   struct file *leak_fd;
   leak_fd = filp_open("/proc/kallsyms", O_RDONLY, 0);
   kernel_read(leak_fd, leak, 16, &offset);
   filp_close(leak_fd, NULL);
-  printk(KERN_ALERT "leak: %s\n", leak);
-
 }
 
 
@@ -55,8 +57,6 @@ static long proc_read(struct file *filp, char *buffer, size_t length, loff_t *of
   kstrtoul(leak, 16, &leak_ul);
   snprintf(leak_str, LEAK_SIZE, "%lu", leak_ul);
   ret = copy_to_user(buffer, leak_str, LEAK_SIZE);
-
-  printk(KERN_ALERT "leak_to_ul: %s\n", leak_str);
 
 	if (ret)
 		return -EFAULT;

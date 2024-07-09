@@ -43,11 +43,7 @@ static ssize_t device_write(struct file *filp, const char *buf, size_t len, loff
     int ret;
     char tmp_buffer[200];
    
-    printk(KERN_ALERT "Length: %ld\n", len);
     ret = copy_from_user(message_receiver, buf, len);
-
-    printk(KERN_ALERT "buf: %s\n", buf);
-    printk(KERN_ALERT "Message2: %pS\n", &message_receiver);
 
     if (ret)
 		  return -EFAULT;
