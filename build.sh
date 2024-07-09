@@ -19,7 +19,8 @@ wget -q -c https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-$KERNEL_V
 [ -e linux-$KERNEL_VERSION ] || tar xzf linux-$KERNEL_VERSION.tar.gz
 
 echo "[+] Building kernel..."
-make -C linux-$KERNEL_VERSION defconfig
+make clean -C linux-$KERNEL_VERSION
+make -C linux-$KERNEL_VERSION defconfig KCFLAGS=-Wno-error=use-after-free
 echo "CONFIG_NET_9P=y" >> linux-$KERNEL_VERSION/.config
 echo "CONFIG_NET_9P_DEBUG=n" >> linux-$KERNEL_VERSION/.config
 echo "CONFIG_9P_FS=y" >> linux-$KERNEL_VERSION/.config
@@ -50,12 +51,21 @@ echo "CONFIG_DEBUG_INFO_BTF=y" >> linux-$KERNEL_VERSION/.config
 echo "CONFIG_FRAME_POINTER=y" >> linux-$KERNEL_VERSION/.config
 echo "CONFIG_CC_STACKPROTECTOR_NONE=y" >> linux-$KERNEL_VERSION/.config
 echo "CONFIG_PRINTK_TIME=n" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_VMAP_STACK=n" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_CC_HAS_SANE_STACKPROTECTOR=n" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_HAVE_STACKPROTECTOR=n" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_CC_HAS_STACKPROTECTOR_NONE=y" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_STACKPROTECTOR=n" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_STACKPROTECTOR_STRONG=n" >> linux-$KERNEL_VERSION/.config
+echo "CONFIG_STACK_VALIDATION=n" >> linux-$KERNEL_VERSION/.config
+
 
 sed -i 'N;s/WARN("missing symbol table");\n\t\treturn -1;/\n\t\treturn 0;\n\t\t\/\/ A missing symbol table is actually possible if its an empty .o file.  This can happen for thunk_64.o./g' linux-$KERNEL_VERSION/tools/objtool/elf.c
 
 sed -i 's/unsigned long __force_order/\/\/ unsigned long __force_order/g' linux-$KERNEL_VERSION/arch/x86/boot/compressed/pgtable_64.c
 
-make -C linux-$KERNEL_VERSION -j16 bzImage
+make clean -C linux-$KERNEL_VERSION
+make -C linux-$KERNEL_VERSION -j20 bzImage KCFLAGS=-Wno-error=use-after-free
 
 #
 # Busybox
